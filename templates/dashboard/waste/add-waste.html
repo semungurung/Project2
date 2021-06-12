@@ -1,0 +1,106 @@
+{% extends "dashboard/das_base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}
+Ewastemandu
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/leaflet.css' %}">
+{% endblock css %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Waste Add</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard:dashboard' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard:wst_list' %}"> My Wastes</a></li>
+                        <li class="breadcrumb-item active"> Create</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <!-- form start -->
+                        <form role="form" method="POST" class="ml-3" enctype="multipart/form-data">{% csrf_token %}
+                            {{ form.name|as_crispy_field }}
+                            {{ form.category|as_crispy_field }}
+                            {{ form.image1|as_crispy_field }}
+                            {{ form.image2|as_crispy_field }}
+                            {{ form.image3|as_crispy_field }}
+                            {{ form.waste_status|as_crispy_field }}
+                            <div id="mapid"></div>
+                            {{ form.location_lat|as_crispy_field }}
+                            {{ form.location_long|as_crispy_field }}
+                            {{ form.about|as_crispy_field }}
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-success">Add Waste</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'js/leaflet.js' %}"></script>
+    <script>
+        var map;
+var pin;
+var tilesURL='https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png';
+var mapAttrib='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>';
+
+// add map container
+$('#mapid').prepend('<div id="map" style="height:70vh;width:100%;"></div>');
+MapCreate();
+
+function MapCreate() {
+  // create map instance
+  if (!(typeof map == "object")) {
+    map = L.map('map', {
+      center: [28,84],
+      zoom: 7
+    });
+  }
+  else {
+    map.setZoom(3).panTo([40,0]);
+  }
+  // create the tile layer with correct attribution
+  L.tileLayer(tilesURL, {
+    attribution: mapAttrib,
+    maxZoom: 19
+  }).addTo(map);
+}
+
+map.on('click', function(ev) {
+  $('#id_location_lat').val(ev.latlng.lat);
+  $('#id_location_long').val(ev.latlng.lng);
+  if (typeof pin == "object") {
+    pin.setLatLng(ev.latlng);
+  }
+  else {
+    pin = L.marker(ev.latlng,{ riseOnHover:true,draggable:true });
+    pin.addTo(map);
+    pin.on('drag',function(ev) {
+      $('#id_location_lat').val(ev.latlng.lat);
+      $('#id_location_long').val(ev.latlng.lng);
+    });
+  }
+});
+    </script>
+{% endblock js %}

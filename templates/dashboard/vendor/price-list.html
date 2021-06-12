@@ -1,0 +1,140 @@
+{% extends "dashboard/das_base.html" %}
+{% load static %}
+{% block title %}
+Ewastemandu
+{% endblock %}
+{% block css %}
+{% endblock css %}
+{% block content %}
+    <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"> Category Price</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard:dashboard' %}">Home</a></li>
+                        <li class="breadcrumb-item active"> Category Price</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                    <a href="{% url 'dashboard:catg_prc_add' %}" class="btn btn-success">
+                      <i class="fas fa-plus"></i> Add New Price
+                    </a>
+                  </div>
+                    <div class="card-body">
+                        <table id="usr_table" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th> Category</th>
+                                    <th> Vendor</th>
+                                    <th> Price</th>
+                                    <th> Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for prc in prices %}
+                                <tr>
+                                    <td>{{ prc.category.name }}</td>
+                                    <td>{{ prc.vendor.company_name }}</td>
+                                    <td>{{ prc.price }}</td>
+                                    <td>
+                                        <a href="{% url 'dashboard:catg_prc_update' prc.id %}" title="Edit" class="btn btn-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-danger delete" title="Delete" url="{% url 'dashboard:catg_prc_delete' prc.id %}" data-toggle="modal" data-target="#usr_delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                             {% comment %}
+                            <tfoot>
+                                <tr>
+                                    <th> Category</th>
+                                    <th> Vendor</th>
+                                    <th> Price</th>
+                                    <th> Action</th>
+                                </tr>
+                            </tfoot>
+                            {% endcomment %}
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </section>
+    <div class="modal fade" id="usr_delete">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Category Price</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are You Sure !</p>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-warning remove"> OK</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+{% endblock content %}
+{% block js %}
+    <script>
+$(function() {
+    $('#usr_table').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+    });
+});
+$.ajaxSetup({
+  data: { csrfmiddlewaretoken: '{{ csrf_token }}' }
+});
+$('#usr_table').on('click', '.delete', function() {
+  var url = $(this).attr('url');
+  $('.remove').off('click');
+  $('.remove').click(function() {
+    data = $(this).serialize()
+    $.ajax({
+      async: true,
+      url: url,
+      method: 'POST',
+      success: function(result) {
+        location.reload();
+      },
+      error: function(request, status, error) {
+        alert(error);
+      }
+    });
+  });
+});
+</script>
+{% endblock js %}
+

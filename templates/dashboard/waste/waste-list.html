@@ -1,0 +1,160 @@
+{% extends "dashboard/das_base.html" %}
+{% load static %}
+{% block title %}
+Ewastemandu
+{% endblock %}
+{% block css %}
+{% endblock css %}
+{% block content %}
+    <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"> My E-Wastes</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard:dashboard' %}">Home</a></li>
+                        <li class="breadcrumb-item active"> E-Wastes</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                {% if request.user.user_type == "user" %}
+                <div class="card-header">
+                    <a href="{% url 'dashboard:wst_add' %}" class="btn btn-success">
+                      <i class="fas fa-plus"></i> Add New Waste
+                    </a>
+                  </div>
+                {% endif %}
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="usr_table" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th> Waste Name</th>
+                                    <th> Category</th>
+                                    {% if request.user.user_type == 'admin' %}
+                                        <th> Owner</th>
+                                    {% endif %}
+                                    <th> Condition</th>
+                                    <th> Created</th>
+                                    <th> Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for waste in wastes %}
+                                <tr>
+                                    <td>{{ waste.name }}</td>
+                                    <td>{{waste.category.name }}</td>
+                                    {% if request.user.user_type == 'admin' %}
+                                    <td>{{ waste.owner.clientuser.get_client_name }}</td>
+                                    {% endif %}
+                                    <td>{{ waste.waste_status }}</td>
+                                    <td>{{ waste.created }}</td>
+                                    <td>
+                                        {% if waste.order  %}
+                                            <span style="font-weight: bold;{% if waste.order.status == 'onhold' %}color:#4444dc;{% elif waste.order.status == 'sold' %}color:red;{% else %}color:#ffc107;{% endif %};font-weight: bold;">{{ waste.order.status }}</span>
+                                            {% else %}
+                                            <a href="{% url 'dashboard:wst_sell' waste.id %}" title="Sell" class="btn btn-primary">
+                                            <i class="fas fa-money-bill-alt"></i></a>
+                                        <a href="{% url 'dashboard:wst_update' waste.id %}" title="Edit" class="btn btn-primary">
+                                            <i class="fas fa-edit"></i></a>
+                                            <button type="button" class="btn btn-danger delete" title="Delete" url="{% url 'dashboard:usr_delete' user.id %}" data-toggle="modal" data-target="#usr_delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                             {% comment %}
+                            <tfoot>
+                                <tr>
+                                    <th> Waste Name</th>
+                                    <th> Category</th>
+                                    {% if request.user.user_type == 'admin' %}
+                                        <th> Owner</th>
+                                    {% endif %}
+                                    <th> Condition</th>
+                                    <th> Created</th>
+                                    <th> Action</th>
+                                </tr>
+                            </tfoot>
+                             {% endcomment %}
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </section>
+    <div class="modal fade" id="usr_delete">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Waste</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are You Sure !</p>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-warning remove"> OK</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+{% endblock content %}
+{% block js %}
+    <script>
+$(function() {
+    $('#usr_table').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+    });
+});
+$.ajaxSetup({
+  data: { csrfmiddlewaretoken: '{{ csrf_token }}' }
+});
+$('#usr_table').on('click', '.delete', function() {
+  var url = $(this).attr('url');
+  $('.remove').off('click');
+  $('.remove').click(function() {
+    data = $(this).serialize()
+    $.ajax({
+      async: true,
+      url: url,
+      method: 'POST',
+      success: function(result) {
+        location.reload();
+      },
+      error: function(request, status, error) {
+        alert(error);
+      }
+    });
+  });
+});
+</script>
+{% endblock js %}
+

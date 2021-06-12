@@ -1,0 +1,53 @@
+{% extends "dashboard/das_base.html" %}
+{% load static %}
+{% block title %}
+Ewastemandu
+{% endblock %}
+{% block css %}
+{% endblock css %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Confirm Order</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard:dashboard' %}">Home</a></li>
+                        <li class="breadcrumb-item active"> Confirm Order</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <!-- form start -->
+                        <h4>Waste Name: {{ waste.name }}</h4>
+                        <h4>Waste category: {{ waste.category.name }}</h4>
+                        <h4>Waste Status: {{ waste.waste_status }}</h4>
+                        <h4>Buyer Company Name: {{ vendor.company_name }}</h4>
+                        <form role="form" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                            <h3>Are you sure ?</h3>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Make Order Now</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock content %}
+{% block js %}
+{% endblock js %}

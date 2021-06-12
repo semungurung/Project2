@@ -1,0 +1,154 @@
+{% extends "dashboard/das_base.html" %}
+{% load static %}
+{% block title %}
+Ewastemandu
+{% endblock %}
+{% block css %}
+{% endblock css %}
+{% block content %}
+    <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"> My Orders</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard:dashboard' %}">Home</a></li>
+                        <li class="breadcrumb-item active"> My Orders</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="usr_table" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    
+                                    <th> Waste Name</th>
+                                    <th> Order Number</th>
+                                    <th> Vendor Name</th>
+                                    <th> Vendor Address</th>
+                                    <th> Date</th>
+                                    <th> Status</th>
+                                    <th> Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                <tr>
+                                    
+                                    <td>{{ order.waste.name }}</td>
+                                    <td>{{ order.id }}</td>
+                                    <td>{{ order.vendor.company_name }}</td>
+                                    <td>{{ order.vendor.address }}</td>
+                                    <td>{{ order.created }}</td>
+                                    <td style="font-weight: bold;{% if order.status == 'onhold' %}color:#4444dc;{% elif order.status == 'sold' %}color:red;{% else %}color:#ffc107;{% endif %}">{{ order.status }}</td>
+                                {% if order.status == 'sold' %}
+                                    <td><a href="{% url 'dashboard:myorder_detail' order.id %}" title="View" class="btn btn-primary">
+                                            <i class="fas fa-eye"></i></a></td>
+                                    {% elif order.status == 'onhold' %}
+                                    <td>
+                                        <a href="{% url 'dashboard:myorder_detail' order.id %}" title="View" class="btn btn-primary">
+                                            <i class="fas fa-eye"></i></a>
+                                    <button type="button" class="btn btn-warning delete" url="{% url 'dashboard:myorder_cancel' order.id %}" title="Cancel" data-toggle="modal" data-target="#usr_delete">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                    </td>
+                                {% else %}
+                                    <td>
+                                    <a href="{% url 'dashboard:myorder_detail' order.id %}" title="View" class="btn btn-primary">
+                                            <i class="fas fa-eye"></i></a>
+                                    </td>
+                                {% endif %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            {% comment %}
+                            <tfoot>
+                                <tr>
+                                    <th> Order Number</th>
+                                    <th> Waste Name</th>
+                                    <th> Vendor Name</th>
+                                    <th> Vendor Address</th>
+                                    <th> Status</th>
+                                    <th> Action</th>
+                                </tr>
+                            </tfoot>
+                            {% endcomment %}
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </section>
+    <div class="modal fade" id="usr_delete">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Are you Sure Cancel order </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are You Sure !</p>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-warning remove"> OK</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+{% endblock content %}
+{% block js %}
+    <script>
+$(function() {
+    $('#usr_table').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+    });
+});
+$.ajaxSetup({
+  data: { csrfmiddlewaretoken: '{{ csrf_token }}' }
+});
+$('#usr_table').on('click', '.delete', function() {
+  var url = $(this).attr('url');
+  $('.remove').off('click');
+  $('.remove').click(function() {
+    data = $(this).serialize()
+    $.ajax({
+      async: true,
+      url: url,
+      method: 'POST',
+      success: function(result) {
+        location.reload();
+      },
+      error: function(request, status, error) {
+        alert(error);
+      }
+    });
+  });
+});
+</script>
+{% endblock js %}

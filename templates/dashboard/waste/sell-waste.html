@@ -1,0 +1,128 @@
+{% extends "dashboard/das_base.html" %}
+{% load static %}
+{% block title %}
+Ewastemandu
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/leaflet.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ruler.css' %}">
+{% endblock css %}
+{% block content %}
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Find Vendor</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard:dashboard' %}">Home</a></li>
+                        <li class="breadcrumb-item active"> Near Vendors</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                            <div id="mapid"></div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'js/leaflet.js' %}"></script>
+    <script src="{% static 'js/hversine.js' %}"></script>
+    <script>
+        var map;
+var pin;
+var tilesURL='https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png';
+var mapAttrib='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>';
+
+// add map container
+$('#mapid').prepend('<div id="map" style="height:70vh;width:100%;"></div>');
+MapCreate();
+
+function MapCreate() {
+  // create map instance
+  if (!(typeof map == "object")) {
+    map = L.map('map', {
+      center: [40,0],
+      zoom: 3
+    });
+  }
+  else {
+    map.setZoom(3).panTo([84,24]);
+  }
+  // create the tile layer with correct attribution
+  L.tileLayer(tilesURL, {
+    attribution: mapAttrib,
+    maxZoom: 19
+  }).addTo(map);
+
+  var greenIcon = new L.Icon({
+  iconUrl: "{% static 'img/green.png' %}",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+  var waste_name = "{{ waste.name|safe }}";
+  var w_lat = {{ waste_lat|safe }}
+  var w_long = {{ waste_long|safe }}
+  L.marker([w_lat, w_long], {icon: greenIcon}).addTo(map)
+        .bindPopup("<b>Waste </b>"+waste_name+"<br/> Location.").openPopup();
+  var geojson_data = {{ geojson|safe }}
+    L.geoJson(geojson_data, {
+        onEachFeature: HandleFeature,
+      }).addTo(map);
+}
+    function HandleFeature(feature, layer) {
+      layer.on({
+        click: layerClick
+      });
+    }
+    var wst_id = {{ waste.id|safe }}
+    function layerClick(e) {
+        var info_url = window.location.origin
+        var price='';
+        new_url = info_url+"/dashboard/price/"+wst_id+"/"+e.target.feature.properties.pk+"/"
+        $.ajax({
+            url:new_url,
+            type:'GET',
+            dataType:'json',
+            async: false,
+            success: function (res) {
+                price = res.price
+            }
+        });
+        var popup = L.popup();
+       popup
+        .setLatLng(e.latlng)
+        .setContent(`
+        <h3>${e.target.feature.properties.company_name}</h3>
+        <p>Address : ${e.target.feature.properties.address}</p>
+        <p>contact : ${e.target.feature.properties.contact}</p>
+        <button class="btn btn-secondary">
+        <i class="fas fa-money-bill-alt"></i> ${price}</button>
+        <a href="/dashboard/make-order/${+wst_id}/${e.target.feature.properties.pk}" title="Sell" class="btn btn-primary"><span style="color: white">Make Order</span></a>
+        `)
+        .openOn(map);
+
+    }
+    L.control.ruler().addTo(map);
+
+    </script>
+{% endblock js %}

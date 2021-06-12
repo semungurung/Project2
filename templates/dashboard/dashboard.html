@@ -1,0 +1,192 @@
+{% extends "dashboard/das_base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}
+Ewastemandu
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/leaflet.css' %}">
+{% endblock css %}
+{% block content %}
+      <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          {% if request.user.user_type == 'admin' %}
+                  <div class="col-md-4">
+          <!-- small box -->
+          <div class="small-box bg-warning">
+            <div class="inner">
+              <h3>{{users_count}}</h3>
+              <p>All Users</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-person-add"></i>
+            </div>
+            <a href="" class="small-box-footer">More info <i
+                class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <!-- small box -->
+          <div class="small-box bg-secondary">
+            <div class="inner">
+              <h3>{{total_vendor}}</h3>
+              <p> Total Vendor</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-bag"></i>
+            </div>
+            <a href="" class="small-box-footer">More info <i
+                class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <!-- small box -->
+          <div class="small-box bg-info">
+            <div class="inner">
+              <h3>{{total_client}}</h3>
+              <p> Total Client User</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-bag"></i>
+            </div>
+            <a href="" class="small-box-footer">More info <i
+                class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-md-4">
+          <!-- small box -->
+          <div class="small-box bg-success">
+            <div class="inner">
+              <h3>{{total_waste}}</h3>
+              <p>Total Waste</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="" class="small-box-footer">More info <i
+                class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <!-- small box -->
+          <div class="small-box bg-info">
+            <div class="inner">
+              <h3>{{total_order}}</h3>
+              <p>Total Orders</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="" class="small-box-footer">More info <i
+                class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <!-- small box -->
+          <div class="small-box bg-warning">
+            <div class="inner">
+              <h3>{{total_waste_catg}}</h3>
+              <p>Total Waste Category</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="" class="small-box-footer">More info <i
+                class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    {% if form or user_form %}
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card card-outline">
+              <div class="card-body">
+              
+                <h5 class="card-title">Update Your information </h5>
+                <p class="card-text">
+                  <form role="form" class="ml-3" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                  {{ user_form|crispy }}
+                  {% if request.user.user_type == 'vendor' %}
+                  {{ form.company_name|as_crispy_field }}
+                  {{ form.registration_certificate|as_crispy_field }}
+                  {{ form.contact|as_crispy_field }}
+                  {{ form.address|as_crispy_field }}
+                  <div id="mapid"></div>
+                  {{ form.location_lat|as_crispy_field }}
+                  {{ form.location_long|as_crispy_field }}
+                  {% endif %}
+                  <div class="card-footer">
+                      <button type="submit" class="btn btn-success">Update Information</button>
+                  </div>
+                  </form>
+                </p>
+              
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock content %}
+{% block js %}
+        <script src="{% static 'js/leaflet.js' %}"></script>
+    <script>
+        var map;
+var pin;
+var tilesURL='https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png';
+var mapAttrib='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>';
+
+// add map container
+$('#mapid').prepend('<div id="map" style="height:70vh;width:100%;"></div>');
+MapCreate();
+
+function MapCreate() {
+  // create map instance
+  if (!(typeof map == "object")) {
+    map = L.map('map', {
+      center: [28,84],
+      zoom: 7
+    });
+  }
+  else {
+    map.setZoom(3).panTo([40,0]);
+  }
+  // create the tile layer with correct attribution
+  L.tileLayer(tilesURL, {
+    attribution: mapAttrib,
+    maxZoom: 19
+  }).addTo(map);
+}
+
+map.on('click', function(ev) {
+  $('#id_location_lat').val(ev.latlng.lat);
+  $('#id_location_long').val(ev.latlng.lng);
+  if (typeof pin == "object") {
+    pin.setLatLng(ev.latlng);
+  }
+  else {
+    pin = L.marker(ev.latlng,{ riseOnHover:true,draggable:true });
+    pin.addTo(map);
+    pin.on('drag',function(ev) {
+      $('#id_location_lat').val(ev.latlng.lat);
+      $('#id_location_long').val(ev.latlng.lng);
+    });
+  }
+});
+    </script>
+{% endblock js %}
+

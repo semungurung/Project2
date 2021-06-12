@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <!-- Favicons -->
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <!-- Vendor CSS Files -->
+  <link href="{% static 'main/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'main/vendor/icofont/icofont.min.css' %}" rel="stylesheet">
+  <link href="{% static 'main/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'main/vendor/animate.css/animate.min.css' %}" rel="stylesheet">
+  <link href="{% static 'main/vendor/owl.carousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+  <link href="{% static 'main/vendor/venobox/venobox.css' %}" rel="stylesheet">
+     <link rel="stylesheet" href="{% static 'css/toastr.min.css' %}">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'main/css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Sign In form Start -->
+    <section class="sign-in">
+        <div class="row">
+            <div class="container">
+                <!-- Default form login -->
+                <form class="text-center border border-light p-5" method="POST" action="{% url 'signup_client' %}">{% csrf_token %}
+                    <p class="h4 mb-4">Sign up</p>
+                {% include 'alert.html' %}
+                    {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                    {% endif %}
+                    <!-- Email -->
+                    <input type="hidden" name="user_type" value="user">
+                    <input type="email" name="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="E-mail">
+                    <input type="text" name="first_name" class="form-control mb-4" placeholder="First Name">
+                    <input type="text" name="last_name" class="form-control mb-4" placeholder="Last Name">
+                    <!-- Password -->
+                    <input type="password" name="password1" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Password">
+                    <!-- Confirm Password -->
+                    <input type="password" name="password2" id="defaultLoginFormPassword1" class="form-control mb-4" placeholder="Confirm Password">
+
+                    <!-- Sign in button -->
+                    <button class="btn btn-info btn-block my-4" type="submit">Register</button>
+                    <!-- Register -->
+
+                    <!-- Social login -->
+                    {% comment %}
+                    <p>or sign in with:</p>
+                    <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+                    <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+                    <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+                    <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+                    <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+                    {% endcomment %}
+                </form>
+            </div>
+        </div>
+        <!-- Sign In form End -->
+    </section>
+<script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/toastr.min.js' %}"></script>
+<script src="{% static 'js/alert.js' %}"></script>
+</body>
+
+</html>

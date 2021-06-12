@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation</title>
+</head>
+<body>
+{% if success %}
+<h1 style="color: green">Your account is confirmed!<h1>
+	<a href="{% url 'login' %}">Login Here</a>
+{% else %}
+<h1 style="color: red">Error, invalid token!</h1>
+{% endif %}
+</body>
+</html>
