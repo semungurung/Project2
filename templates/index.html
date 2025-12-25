@@ -33,7 +33,7 @@ Ewastemandu
             <div class="container">
               <h2 class="animate__animated animate__fadeInDown">Book</h2>
               <p class="animate__animated animate__fadeInUp">Book your pickup now</p>
-              <a href="#about" class="btn-get-started animate__animated animate__fadeInUp scrollto">Read More</a>
+              <a href="{% url 'dashboard:dashboard' %}" class="btn-get-started animate__animated animate__fadeInUp scrollto">Book</a>
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@ Ewastemandu
 
     </div>
   </section><!-- End Hero -->
-
+<br/>
   <main id="main">
 
     <!-- ======= Featured Services Section ======= -->
@@ -74,22 +74,22 @@ Ewastemandu
           <div class="col-lg-4 col-md-6">
             <div class="icon-box">
               <div class="icon"><i class="icofont-computer"></i></div>
-              <h4 class="title"><a href="">Lorem Ipsum</a></h4>
-              <p class="description">Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident</p>
+              <h4 class="title"><a href="">SignUp/Login</a></h4>
+              <p class="description">SignUp/Login to our system and fill in the required details.</p>
             </div>
           </div>
           <div class="col-lg-4 col-md-6">
             <div class="icon-box">
               <div class="icon"><i class="icofont-image"></i></div>
-              <h4 class="title"><a href="">Dolor Sitema</a></h4>
-              <p class="description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
+              <h4 class="title"><a href="">Upload a Picture</a></h4>
+              <p class="description">Upload a picture of your E-waste and Select category of your Ewaste</p>
             </div>
           </div>
           <div class="col-lg-4 col-md-6">
             <div class="icon-box">
               <div class="icon"><i class="icofont-tasks-alt"></i></div>
-              <h4 class="title"><a href="">Sed ut perspiciatis</a></h4>
-              <p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur trade stravi</p>
+              <h4 class="title"><a href="">Schedule an Appointment</a></h4>
+              <p class="description">Pick the Vendor which best suits your requirement and schedule an appointment</p>
             </div>
           </div>
         </div>
@@ -103,28 +103,26 @@ Ewastemandu
 
         <div class="section-title">
           <h2>About Us</h2>
-          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
         </div>
 
-        <div class="row">
-          <div class="col-lg-6 order-1 order-lg-2">
+        <div class="row" >
+          <div class=" about-image">
             <img src="{% static 'main/img/about.jpg' %}" class="img-fluid" alt="">
           </div>
-          <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content">
-            <h3>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.</h3>
-            <p class="font-italic">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-              magna aliqua.
-            </p>
-            <ul>
-              <li><i class="icofont-check-circled"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-              <li><i class="icofont-check-circled"></i> Duis aute irure dolor in reprehenderit in voluptate velit.</li>
-              <li><i class="icofont-check-circled"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</li>
-            </ul>
+          <br>
+          <div class=" about-description">
+            <h3>Connecting to a Single Platform</h3>
             <p>
-              Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-              velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-              culpa qui officia deserunt mollit anim id est laborum
+
+            </p>
+            <p class="font-italic" >
+             
+              Though there is sky-rocketing increment in E-waste materials in the context of Nepal,their separate treatment or collection is not in practice. an As one of the first E-waste companies connection platform in Nepal, Ewastemandu explores innovative ways to bring Ewaste recycling companies in a single platform.Currently, a majority of E-waste generated are offline based .
+              Ewastemandu provides a platform to connect between vendor companies and user which provides solution to matters concerning E-waste management for all types of users from household Ewaste to company-based E-waste In addition to acting as a bridge, we also price and nearest location comparison. Not only would this be an opportunity to explore Ewaste management companies in Nepal, it would also allow to get optimum value of their Ewaste products. Ewastemandu also helps to connect with the companies that are not yet using any separate website.
+
+            </p>
+            <p>
+
             </p>
           </div>
         </div>
@@ -133,7 +131,7 @@ Ewastemandu
     </section><!-- End About Us Section -->
 
     <!-- ======= Why Us Section ======= -->
-    <section id="why-us" class="why-us">
+    <!-- <section id="why-us" class="why-us">
       <div class="container">
 
         <div class="row no-gutters">
@@ -177,15 +175,15 @@ Ewastemandu
         </div>
 
       </div>
-    </section><!-- End Why Us Section -->
+    </section>End Why Us Section -->
 
-    <!-- ======= Our Clients Section ======= -->
+    <!-- =======Vendor Companies Section ======= -->
     <section id="clients" class="clients">
       <div class="container">
 
         <div class="section-title">
-          <h2>Our Clients</h2>
-          <p>Over the past few years we have worked with different Companies to manage their companies E-waste in a hassle free way.</p>
+          <h2>Vendor Companies</h2>
+          <p>These are the companies that helps user to manage their E-waste in a hassle free way.</p>
         </div>
 
         <div class="owl-carousel clients-carousel">
@@ -203,12 +201,12 @@ Ewastemandu
     </section><!-- End Our Clients Section -->
 
     <!-- ======= Services Section ======= -->
-    <section id="services" class="services">
+    <!-- <section id="services" class="services">
       <div class="container">
 
         <div class="section-title">
           <h2>Services</h2>
-          <p>Here are the few services that E-wastemandu has been providing over years</p>
+          <p>Here are the few services that E-wastemandu has been providing  years</p>
         </div>
 
         <div class="row">
@@ -293,7 +291,8 @@ Ewastemandu
         </div>
 
       </div>
-    </section><!-- End Services Section -->
+    </section> -->
+    <!-- End Services Section -->
 
     <!-- ======= Call to action Section
     <section id="cta" class="cta">
@@ -483,7 +482,7 @@ Ewastemandu
         <div class="row">
           <div class="col-lg-3 col-md-4 d-flex align-items-stretch">
             <div class="member">
-              <img src=" " alt="">
+              <img src="{% static 'main/img/team/ishowr.jpg' %} "  width="83" height="83" alt="">
               <h4>Ishwor Acharya</h4>
               <span>Chief Executive Officer</span>
               <p>
@@ -500,7 +499,7 @@ Ewastemandu
 
           <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
             <div class="member">
-              <img src=" " alt="">
+              <img src="{% static 'main/img/team/semun.webp' %} "  width="83" height="83" alt="">
               <h4>Semun Gurung</h4>
               <span> Executive Officer</span>
               <p>
@@ -517,7 +516,7 @@ Ewastemandu
 
           <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
             <div class="member">
-              <img src=" " alt="">
+              <img src=" {% static 'main/img/team/shreya.jpg' %}" width="83" height="83" alt="">
               <h4>Shreya Amatya</h4>
               <span>Product Manager</span>
               <p>  Hi , pleased to meet you.
@@ -533,7 +532,7 @@ Ewastemandu
 
           <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
             <div class="member">
-              <img src=" " alt="">
+              <img src=" {% static 'main/img/team/yang.webp' %}"  width="83" height="83" alt="">
               <h4>Yangisha K.C</h4>
               <span>CTO</span>
               <p>
@@ -584,7 +583,7 @@ Ewastemandu
                 <p> 000000</p>
               </div>
 
-              <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621" frameborder="0" style="border:0; width: 100%; height: 290px;" allowfullscreen></iframe>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3594417.711636001!2d81.88546698993949!3d28.38382579079864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3995e8c77d2e68cf%3A0x34a29abcd0cc86de!2sNepal!5e0!3m2!1sen!2sbg!4v1623084237275!5m2!1sen!2sbg" frameborder="0" style="border:0; width: 100%; height: 290px;" allowfullscreen></iframe>
             </div>
 
           </div>
@@ -634,3 +633,5 @@ Ewastemandu
 {% block js %}
 
 {% endblock %}
+updated.txt
+Displaying updated.txt.

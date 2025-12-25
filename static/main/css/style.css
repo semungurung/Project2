@@ -11,6 +11,8 @@
 body {
   font-family: "Open Sans", sans-serif;
   color: #444444;
+  margin: auto;
+  width: 1000px;
 }
 
 a {
@@ -391,15 +393,27 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff;
 }
 
+.about-image{
+  display: block;
+  width: 800px;
+  text-align: center;
+  margin: auto;
+}
+.about-description{
+  text-align: center;
+  display: block;
+}
 /*--------------------------------------------------------------
 # Hero Section
 --------------------------------------------------------------*/
 #hero {
-  width: 100%;
+  width: 1000px;
   height: 70vh;
+  padding: 35%;
   background-color: rgba(9, 9, 9, 0.8);
   overflow: hidden;
   position: relative;
+  
 }
 
 #hero .carousel, #hero .carousel-inner, #hero .carousel-item, #hero .carousel-item::before {
@@ -623,7 +637,8 @@ section {
 # Featured Services
 --------------------------------------------------------------*/
 .featured-services {
-  padding: 20px 0;
+  padding: 25px 0;
+  text-align: center;
 }
 
 .featured-services .icon-box {
@@ -1470,7 +1485,7 @@ section {
 # Footer
 --------------------------------------------------------------*/
 #footer {
-  background: #090909;
+  background: #5cb874;
   color: #fff;
   font-size: 14px;
   text-align: center;

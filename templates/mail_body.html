@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Email Confirmation</title>
+    <style>
+        body{
+            margin: auto;
+            width: 900px;
+            text-align: center;
+            box-shadow: inset;
+        }
+    </style>
 </head>
+
 <body>
 <h1>You are almost there, {{ user.username }}!</h1><br>
 <h2>Please click <a href="{{ link }}">here</a> to confirm your account</h2>
